@@ -1,4 +1,4 @@
-package plugin_models
+package models
 
 type GetSpaceUsers_Model struct {
 	Guid     string

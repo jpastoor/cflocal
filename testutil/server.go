@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 
+	"code.cloudfoundry.org/cflocal/cfplugin/models"
 	"code.cloudfoundry.org/cflocal/mocks"
 )
 
@@ -55,7 +56,7 @@ func (s *Server) Handle(auth bool, status int, response string) (*Request, Calls
 
 func (s *Server) HandleApp(name string, status int, response string) (*Request, Calls) {
 	loginCall := s.cli.EXPECT().IsLoggedIn().Return(true, nil)
-	getAppCall := s.cli.EXPECT().GetApp(name).Return(plugin_models.GetAppModel{Guid: "some-app-guid"}, nil).After(loginCall)
+	getAppCall := s.cli.EXPECT().GetApp(name).Return(models.GetAppModel{Guid: "some-app-guid"}, nil).After(loginCall)
 
 	request, calls := s.Handle(true, status, response)
 	calls.AfterCall(loginCall)

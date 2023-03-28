@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 
+	"code.cloudfoundry.org/cflocal/ui"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
@@ -14,27 +15,27 @@ import (
 var _ = Describe("UI", func() {
 	var (
 		out, err, in *gbytes.Buffer
-		ui           *UI
+		myUi         *ui.UI
 	)
 
 	BeforeEach(func() {
 		out = gbytes.NewBuffer()
 		err = gbytes.NewBuffer()
 		in = gbytes.NewBuffer()
-		ui = &UI{Out: out, Err: err, In: in}
+		myUi = &ui.UI{Out: out, Err: err, In: in}
 	})
 
 	Describe("#Prompt", func() {
 		It("should output the prompt and return the user's entry", func() {
 			io.WriteString(in, "some answer\n")
-			response := ui.Prompt("some question")
+			response := myUi.Prompt("some question")
 			Expect(out).To(gbytes.Say("some question"))
 			Expect(response).To(Equal("some answer"))
 		})
 
 		Context("when the input cannot be read", func() {
 			It("should output the prompt and return an empty string", func() {
-				response := ui.Prompt("some question")
+				response := myUi.Prompt("some question")
 				Expect(out).To(gbytes.Say("some question"))
 				Expect(response).To(BeEmpty())
 			})
@@ -43,7 +44,7 @@ var _ = Describe("UI", func() {
 
 	Describe("#Output", func() {
 		It("should output the provided format string", func() {
-			ui.Output("%s format", "some")
+			myUi.Output("%s format", "some")
 			Expect(out).To(gbytes.Say("some format"))
 		})
 	})
@@ -51,15 +52,15 @@ var _ = Describe("UI", func() {
 	Describe("#Warning", func() {
 		Context("when stderr is connected", func() {
 			It("should output the provided warning as to stderr", func() {
-				ui.ErrIsTerm = true
-				ui.Warn("%s warning", "some")
+				myUi.ErrIsTerm = true
+				myUi.Warn("%s warning", "some")
 				Expect(err).To(gbytes.Say("Warning: some warning"))
 			})
 		})
 
 		Context("when stderr is not connected", func() {
 			It("should output the provided warning to stdout", func() {
-				ui.Warn("%s warning", "some")
+				myUi.Warn("%s warning", "some")
 				Expect(out).To(gbytes.Say("Warning: some warning"))
 			})
 		})
@@ -68,8 +69,8 @@ var _ = Describe("UI", func() {
 	Describe("#Error", func() {
 		Context("when stderr is connected", func() {
 			It("should output the provided error as to stderr followed by FAILED", func() {
-				ui.ErrIsTerm = true
-				ui.Error(errors.New("some error"))
+				myUi.ErrIsTerm = true
+				myUi.Error(errors.New("some error"))
 				Expect(err).To(gbytes.Say("Error: some error"))
 				Expect(out).To(gbytes.Say("FAILED"))
 			})
@@ -77,7 +78,7 @@ var _ = Describe("UI", func() {
 
 		Context("when stderr is not connected", func() {
 			It("should output the provided error to stdout followed by FAILED", func() {
-				ui.Error(errors.New("some error"))
+				myUi.Error(errors.New("some error"))
 				Expect(out).To(gbytes.Say("Error: some error"))
 				Expect(out).To(gbytes.Say("FAILED"))
 			})
@@ -90,7 +91,7 @@ var _ = Describe("UI", func() {
 			progress <- mockProgress{}
 			progress <- mockProgress{}
 			close(progress)
-			Expect(ui.Loading("some-message", progress)).To(Succeed())
+			Expect(myUi.Loading("some-message", progress)).To(Succeed())
 			Expect(progress).To(BeClosed())
 		})
 
@@ -100,7 +101,7 @@ var _ = Describe("UI", func() {
 			progress <- mockProgress{err: errors.New("second error")}
 			progress <- mockProgress{}
 			close(progress)
-			err := ui.Loading("some-message", progress)
+			err := myUi.Loading("some-message", progress)
 			Expect(err).To(MatchError("second error"))
 			Expect(progress).To(BeClosed())
 		})

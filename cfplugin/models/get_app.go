@@ -1,4 +1,4 @@
-package plugin_models
+package models
 
 import "time"
 

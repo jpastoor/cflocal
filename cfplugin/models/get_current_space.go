@@ -1,4 +1,4 @@
-package plugin_models
+package models
 
 type Space struct {
 	SpaceFields

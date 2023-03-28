@@ -7,6 +7,8 @@ import (
 	"net/rpc"
 	"os"
 	"time"
+
+	"code.cloudfoundry.org/cflocal/cfplugin/models"
 )
 
 type cliConnection struct {
@@ -126,8 +128,8 @@ func (c *cliConnection) pingCLI() {
 	}
 }
 
-func (c *cliConnection) GetCurrentOrg() (plugin_models.Organization, error) {
-	var result plugin_models.Organization
+func (c *cliConnection) GetCurrentOrg() (models.Organization, error) {
+	var result models.Organization
 
 	err := c.withClientDo(func(client *rpc.Client) error {
 		return client.Call("CliRpcCmd.GetCurrentOrg", "", &result)
@@ -136,8 +138,8 @@ func (c *cliConnection) GetCurrentOrg() (plugin_models.Organization, error) {
 	return result, err
 }
 
-func (c *cliConnection) GetCurrentSpace() (plugin_models.Space, error) {
-	var result plugin_models.Space
+func (c *cliConnection) GetCurrentSpace() (models.Space, error) {
+	var result models.Space
 
 	err := c.withClientDo(func(client *rpc.Client) error {
 		return client.Call("CliRpcCmd.GetCurrentSpace", "", &result)
@@ -276,8 +278,8 @@ func (c *cliConnection) AccessToken() (string, error) {
 	return result, err
 }
 
-func (c *cliConnection) GetApp(appName string) (plugin_models.GetAppModel, error) {
-	var result plugin_models.GetAppModel
+func (c *cliConnection) GetApp(appName string) (models.GetAppModel, error) {
+	var result models.GetAppModel
 
 	err := c.withClientDo(func(client *rpc.Client) error {
 		return client.Call("CliRpcCmd.GetApp", appName, &result)
@@ -286,8 +288,8 @@ func (c *cliConnection) GetApp(appName string) (plugin_models.GetAppModel, error
 	return result, err
 }
 
-func (c *cliConnection) GetApps() ([]plugin_models.GetAppsModel, error) {
-	var result []plugin_models.GetAppsModel
+func (c *cliConnection) GetApps() ([]models.GetAppsModel, error) {
+	var result []models.GetAppsModel
 
 	err := c.withClientDo(func(client *rpc.Client) error {
 		return client.Call("CliRpcCmd.GetApps", "", &result)
@@ -296,8 +298,8 @@ func (c *cliConnection) GetApps() ([]plugin_models.GetAppsModel, error) {
 	return result, err
 }
 
-func (c *cliConnection) GetOrgs() ([]plugin_models.GetOrgs_Model, error) {
-	var result []plugin_models.GetOrgs_Model
+func (c *cliConnection) GetOrgs() ([]models.GetOrgs_Model, error) {
+	var result []models.GetOrgs_Model
 
 	err := c.withClientDo(func(client *rpc.Client) error {
 		return client.Call("CliRpcCmd.GetOrgs", "", &result)
@@ -306,8 +308,8 @@ func (c *cliConnection) GetOrgs() ([]plugin_models.GetOrgs_Model, error) {
 	return result, err
 }
 
-func (c *cliConnection) GetSpaces() ([]plugin_models.GetSpaces_Model, error) {
-	var result []plugin_models.GetSpaces_Model
+func (c *cliConnection) GetSpaces() ([]models.GetSpaces_Model, error) {
+	var result []models.GetSpaces_Model
 
 	err := c.withClientDo(func(client *rpc.Client) error {
 		return client.Call("CliRpcCmd.GetSpaces", "", &result)
@@ -316,8 +318,8 @@ func (c *cliConnection) GetSpaces() ([]plugin_models.GetSpaces_Model, error) {
 	return result, err
 }
 
-func (c *cliConnection) GetServices() ([]plugin_models.GetServices_Model, error) {
-	var result []plugin_models.GetServices_Model
+func (c *cliConnection) GetServices() ([]models.GetServices_Model, error) {
+	var result []models.GetServices_Model
 
 	err := c.withClientDo(func(client *rpc.Client) error {
 		return client.Call("CliRpcCmd.GetServices", "", &result)
@@ -326,8 +328,8 @@ func (c *cliConnection) GetServices() ([]plugin_models.GetServices_Model, error)
 	return result, err
 }
 
-func (c *cliConnection) GetOrgUsers(orgName string, args ...string) ([]plugin_models.GetOrgUsers_Model, error) {
-	var result []plugin_models.GetOrgUsers_Model
+func (c *cliConnection) GetOrgUsers(orgName string, args ...string) ([]models.GetOrgUsers_Model, error) {
+	var result []models.GetOrgUsers_Model
 
 	cmdArgs := append([]string{orgName}, args...)
 
@@ -338,8 +340,8 @@ func (c *cliConnection) GetOrgUsers(orgName string, args ...string) ([]plugin_mo
 	return result, err
 }
 
-func (c *cliConnection) GetSpaceUsers(orgName string, spaceName string) ([]plugin_models.GetSpaceUsers_Model, error) {
-	var result []plugin_models.GetSpaceUsers_Model
+func (c *cliConnection) GetSpaceUsers(orgName string, spaceName string) ([]models.GetSpaceUsers_Model, error) {
+	var result []models.GetSpaceUsers_Model
 
 	cmdArgs := []string{orgName, spaceName}
 
@@ -350,8 +352,8 @@ func (c *cliConnection) GetSpaceUsers(orgName string, spaceName string) ([]plugi
 	return result, err
 }
 
-func (c *cliConnection) GetOrg(orgName string) (plugin_models.GetOrg_Model, error) {
-	var result plugin_models.GetOrg_Model
+func (c *cliConnection) GetOrg(orgName string) (models.GetOrg_Model, error) {
+	var result models.GetOrg_Model
 
 	err := c.withClientDo(func(client *rpc.Client) error {
 		return client.Call("CliRpcCmd.GetOrg", orgName, &result)
@@ -360,8 +362,8 @@ func (c *cliConnection) GetOrg(orgName string) (plugin_models.GetOrg_Model, erro
 	return result, err
 }
 
-func (c *cliConnection) GetSpace(spaceName string) (plugin_models.GetSpace_Model, error) {
-	var result plugin_models.GetSpace_Model
+func (c *cliConnection) GetSpace(spaceName string) (models.GetSpace_Model, error) {
+	var result models.GetSpace_Model
 
 	err := c.withClientDo(func(client *rpc.Client) error {
 		return client.Call("CliRpcCmd.GetSpace", spaceName, &result)
@@ -370,8 +372,8 @@ func (c *cliConnection) GetSpace(spaceName string) (plugin_models.GetSpace_Model
 	return result, err
 }
 
-func (c *cliConnection) GetService(serviceInstance string) (plugin_models.GetService_Model, error) {
-	var result plugin_models.GetService_Model
+func (c *cliConnection) GetService(serviceInstance string) (models.GetService_Model, error) {
+	var result models.GetService_Model
 
 	err := c.withClientDo(func(client *rpc.Client) error {
 		return client.Call("CliRpcCmd.GetService", serviceInstance, &result)

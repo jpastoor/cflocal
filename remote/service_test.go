@@ -3,6 +3,8 @@ package remote_test
 import (
 	"net/http"
 
+	"code.cloudfoundry.org/cflocal/cfplugin/models"
+	forge "github.com/buildpack/forge/v2"
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -77,7 +79,7 @@ var _ = Describe("App - Service", func() {
 			req, _ := server.Handle(false, http.StatusOK, `{"app_ssh_endpoint": "some-ssh-host:1000"}`)
 			gomock.InOrder(
 				mockCLI.EXPECT().IsLoggedIn().Return(true, nil),
-				mockCLI.EXPECT().GetApp("some-name").Return(plugin_models.GetAppModel{Guid: "some-guid"}, nil),
+				mockCLI.EXPECT().GetApp("some-name").Return(models.GetAppModel{Guid: "some-guid"}, nil),
 			)
 
 			services, config, err := app.Forward("some-name", forge.Services{

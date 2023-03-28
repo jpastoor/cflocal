@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	forge "github.com/buildpack/forge"
+	forge "github.com/buildpack/forge/v2"
 	engine "github.com/buildpack/forge/engine"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"

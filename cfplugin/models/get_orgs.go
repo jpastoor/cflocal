@@ -1,4 +1,4 @@
-package plugin_models
+package models
 
 type GetOrgs_Model struct {
 	Guid string

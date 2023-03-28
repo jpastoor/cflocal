@@ -5,11 +5,12 @@
 package mocks
 
 import (
+	io "io"
+	reflect "reflect"
+
 	remote "code.cloudfoundry.org/cflocal/remote"
 	forge "github.com/buildpack/forge/v2"
 	gomock "github.com/golang/mock/gomock"
-	io "io"
-	reflect "reflect"
 )
 
 // MockRemoteApp is a mock of RemoteApp interface

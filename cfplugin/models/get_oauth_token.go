@@ -1,4 +1,4 @@
-package plugin_models
+package models
 
 type GetOauthToken_Model struct {
 	Token string
