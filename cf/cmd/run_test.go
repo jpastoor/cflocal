@@ -4,8 +4,8 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/buildpack/forge/app"
 	"github.com/buildpack/forge/engine"
+	forge "github.com/buildpack/forge/v2"
 	"github.com/fatih/color"
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
@@ -84,7 +84,7 @@ var _ = Describe("Run", func() {
 			forwardConfig := &forge.ForwardDetails{
 				Host: "some-ssh-host",
 			}
-			localYML := &app.YAML{
+			localYML := &forge.AppYAML{
 				Applications: []*forge.AppConfig{
 					{Name: "some-other-app"},
 					{

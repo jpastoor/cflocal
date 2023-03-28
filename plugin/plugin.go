@@ -13,6 +13,7 @@ import (
 
 	"github.com/buildpack/forge/engine"
 	"github.com/buildpack/forge/engine/docker"
+	"github.com/buildpack/forge/engine/docker/archive"
 	forge "github.com/buildpack/forge/v2"
 	"github.com/fatih/color"
 	goversion "github.com/hashicorp/go-version"
@@ -108,17 +109,7 @@ func (p *Plugin) Run(cliConnection cfplugin.CliConnection, args []string) {
 		HTTP: ccHTTPClient,
 	}
 	sysFS := &fs.FS{}
-	appYAML := &forge.AppYAML{}
-	if err := appYAML.Load("./local.yml"); err != nil {
-		p.RunErr = err
-		return
-	}
-
-	appConfig := &cmd.Config{}
-	if err := appConfig.Load("./local.yml"); err != nil {
-		p.RunErr = err
-		return
-	}
+	config := &cmd.AppConfig{Path: "./local.yml"}
 
 	help := &Help{
 		CLI: cliConnection,
@@ -134,7 +125,7 @@ func (p *Plugin) Run(cliConnection cfplugin.CliConnection, args []string) {
 				Image:    image,
 				FS:       sysFS,
 				Help:     help,
-				Config:   appYAML,
+				Config:   config,
 			},
 			&cmd.Pull{
 				UI:        p.UI,
@@ -165,7 +156,7 @@ func (p *Plugin) Run(cliConnection cfplugin.CliConnection, args []string) {
 				Stager:    stager,
 				RemoteApp: remoteApp,
 				Image:     image,
-				TarApp:    app.Tar,
+				TarApp:    archive.Tar,
 				FS:        sysFS,
 				Help:      help,
 				Config:    config,

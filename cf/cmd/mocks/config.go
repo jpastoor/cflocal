@@ -5,9 +5,10 @@
 package mocks
 
 import (
-	app "github.com/buildpack/forge/app"
-	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
+
+	forge "github.com/buildpack/forge/v2"
+	gomock "github.com/golang/mock/gomock"
 )
 
 // MockConfig is a mock of Config interface
@@ -34,9 +35,9 @@ func (m *MockConfig) EXPECT() *MockConfigMockRecorder {
 }
 
 // Load mocks base method
-func (m *MockConfig) Load() (*app.YAML, error) {
+func (m *MockConfig) Load() (*forge.AppYAML, error) {
 	ret := m.ctrl.Call(m, "Load")
-	ret0, _ := ret[0].(*app.YAML)
+	ret0, _ := ret[0].(*forge.AppYAML)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -47,7 +48,7 @@ func (mr *MockConfigMockRecorder) Load() *gomock.Call {
 }
 
 // Save mocks base method
-func (m *MockConfig) Save(arg0 *app.YAML) error {
+func (m *MockConfig) Save(arg0 *forge.AppYAML) error {
 	ret := m.ctrl.Call(m, "Save", arg0)
 	ret0, _ := ret[0].(error)
 	return ret0

@@ -34,7 +34,7 @@ func (m *MockLocalApp) EXPECT() *MockLocalAppMockRecorder {
 }
 
 // Tar mocks base method
-func (m *MockLocalApp) Tar(arg0 string, arg1 ...string) (io.ReadCloser, error) {
+func (m *MockLocalApp) Tar(arg0 string, arg1 []string) (io.ReadCloser, error) {
 	varargs := []interface{}{arg0}
 	for _, a := range arg1 {
 		varargs = append(varargs, a)

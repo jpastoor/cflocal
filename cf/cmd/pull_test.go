@@ -1,6 +1,8 @@
 package cmd_test
 
 import (
+	"code.cloudfoundry.org/cflocal/cf/cmd"
+	forge "github.com/buildpack/forge/v2"
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -9,7 +11,6 @@ import (
 	"code.cloudfoundry.org/cflocal/cf/cmd/mocks"
 	sharedmocks "code.cloudfoundry.org/cflocal/mocks"
 	"code.cloudfoundry.org/cflocal/remote"
-	"github.com/buildpack/forge/app"
 )
 
 var _ = Describe("Pull", func() {
@@ -20,7 +21,7 @@ var _ = Describe("Pull", func() {
 		mockFS        *mocks.MockFS
 		mockHelp      *mocks.MockHelp
 		mockConfig    *mocks.MockConfig
-		cmd           *Pull
+		cmdPull       *cmd.Pull
 	)
 
 	BeforeEach(func() {
@@ -30,7 +31,7 @@ var _ = Describe("Pull", func() {
 		mockFS = mocks.NewMockFS(mockCtrl)
 		mockHelp = mocks.NewMockHelp(mockCtrl)
 		mockConfig = mocks.NewMockConfig(mockCtrl)
-		cmd = &Pull{
+		cmdPull = &cmd.Pull{
 			UI:        mockUI,
 			RemoteApp: mockRemoteApp,
 			FS:        mockFS,
@@ -45,10 +46,10 @@ var _ = Describe("Pull", func() {
 
 	Describe("#Match", func() {
 		It("should return true when the first argument is pull", func() {
-			Expect(cmd.Match([]string{"pull"})).To(BeTrue())
-			Expect(cmd.Match([]string{"not-pull"})).To(BeFalse())
-			Expect(cmd.Match([]string{})).To(BeFalse())
-			Expect(cmd.Match(nil)).To(BeFalse())
+			Expect(cmdPull.Match([]string{"pull"})).To(BeTrue())
+			Expect(cmdPull.Match([]string{"not-pull"})).To(BeFalse())
+			Expect(cmdPull.Match([]string{})).To(BeFalse())
+			Expect(cmdPull.Match(nil)).To(BeFalse())
 		})
 	})
 
@@ -61,7 +62,7 @@ var _ = Describe("Pull", func() {
 				Running: map[string]string{"c": "d"},
 				App:     map[string]string{"e": "f"},
 			}
-			oldLocalYML := &app.YAML{
+			oldLocalYML := &forge.AppYAML{
 				Applications: []*forge.AppConfig{
 					{Name: "some-other-app"},
 					{
@@ -73,7 +74,7 @@ var _ = Describe("Pull", func() {
 					},
 				},
 			}
-			newLocalYML := &app.YAML{
+			newLocalYML := &forge.AppYAML{
 				Applications: []*forge.AppConfig{
 					{Name: "some-other-app"},
 					{
@@ -92,7 +93,7 @@ var _ = Describe("Pull", func() {
 			mockRemoteApp.EXPECT().Command("some-app").Return("some-command", nil)
 			mockConfig.EXPECT().Save(newLocalYML)
 
-			Expect(cmd.Run([]string{"pull", "some-app"})).To(Succeed())
+			Expect(cmdPull.Run([]string{"pull", "some-app"})).To(Succeed())
 			Expect(file.Result()).To(Equal("some-droplet"))
 			Expect(droplet.Result()).To(BeEmpty())
 			Expect(mockUI.Out).To(gbytes.Say("Successfully downloaded: some-app"))

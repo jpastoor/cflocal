@@ -16,7 +16,7 @@ type Stage struct {
 	Stager    Stager
 	RemoteApp RemoteApp
 	Image     Image
-	TarApp    func(string, ...string) (io.ReadCloser, error)
+	TarApp    func(string, []string) (io.ReadCloser, error)
 	FS        FS
 	Help      Help
 	Config    Config
@@ -50,7 +50,7 @@ func (s *Stage) Run(args []string) error {
 		return err
 	}
 
-	appTar, err := s.TarApp(options.app, `^.+\.droplet$`, `^\..+\.cache$`)
+	appTar, err := s.TarApp(options.app, []string{`^.+\.droplet$`, `^\..+\.cache$`})
 	if err != nil {
 		return err
 	}

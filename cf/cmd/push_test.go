@@ -4,6 +4,7 @@ import (
 	"io"
 	"io/ioutil"
 
+	"code.cloudfoundry.org/cflocal/cf/cmd"
 	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -11,7 +12,7 @@ import (
 
 	"code.cloudfoundry.org/cflocal/cf/cmd/mocks"
 	sharedmocks "code.cloudfoundry.org/cflocal/mocks"
-	"github.com/buildpack/forge/app"
+	forge "github.com/buildpack/forge/v2"
 )
 
 var _ = Describe("Push", func() {
@@ -22,7 +23,7 @@ var _ = Describe("Push", func() {
 		mockFS        *mocks.MockFS
 		mockHelp      *mocks.MockHelp
 		mockConfig    *mocks.MockConfig
-		cmd           *Push
+		cmdPush       *cmd.Push
 	)
 
 	BeforeEach(func() {
@@ -32,7 +33,7 @@ var _ = Describe("Push", func() {
 		mockFS = mocks.NewMockFS(mockCtrl)
 		mockHelp = mocks.NewMockHelp(mockCtrl)
 		mockConfig = mocks.NewMockConfig(mockCtrl)
-		cmd = &Push{
+		cmdPush = &cmd.Push{
 			UI:        mockUI,
 			RemoteApp: mockRemoteApp,
 			FS:        mockFS,
@@ -47,17 +48,17 @@ var _ = Describe("Push", func() {
 
 	Describe("#Match", func() {
 		It("should return true when the first argument is push", func() {
-			Expect(cmd.Match([]string{"push"})).To(BeTrue())
-			Expect(cmd.Match([]string{"not-push"})).To(BeFalse())
-			Expect(cmd.Match([]string{})).To(BeFalse())
-			Expect(cmd.Match(nil)).To(BeFalse())
+			Expect(cmdPush.Match([]string{"push"})).To(BeTrue())
+			Expect(cmdPush.Match([]string{"not-push"})).To(BeFalse())
+			Expect(cmdPush.Match([]string{})).To(BeFalse())
+			Expect(cmdPush.Match(nil)).To(BeFalse())
 		})
 	})
 
 	Describe("#Run", func() {
 		It("should replace an app's droplet and env vars, then restart it", func() {
 			droplet := sharedmocks.NewMockBuffer("some-droplet")
-			localYML := &app.YAML{
+			localYML := &forge.AppYAML{
 				Applications: []*forge.AppConfig{
 					{Name: "some-other-app"},
 					{
@@ -75,7 +76,7 @@ var _ = Describe("Push", func() {
 				mockRemoteApp.EXPECT().SetEnv("some-app", map[string]string{"some": "env"}),
 				mockRemoteApp.EXPECT().Restart("some-app"),
 			)
-			Expect(cmd.Run([]string{"push", "some-app", "-e"})).To(Succeed())
+			Expect(cmdPush.Run([]string{"push", "some-app", "-e"})).To(Succeed())
 			Expect(droplet.Result()).To(BeEmpty())
 			Expect(mockUI.Out).To(gbytes.Say("Successfully pushed: some-app"))
 		})

@@ -74,3 +74,17 @@ func (*Export) options(args []string) (*exportOptions, error) {
 		set.StringVar(&options.reference, "r", "", "")
 	})
 }
+
+type AppConfig struct {
+	Path string
+}
+
+func (config *AppConfig) Load() (*forge.AppYAML, error) {
+	appYAML := &forge.AppYAML{}
+	err := appYAML.Load("./local.yml")
+	return appYAML, err
+}
+
+func (config *AppConfig) Save(localYML *forge.AppYAML) error {
+	return localYML.Save(config.Path)
+}
