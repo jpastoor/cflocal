@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"code.cloudfoundry.org/cflocal/cfplugin/models"
 	"code.cloudfoundry.org/cflocal/mocks"
 )
 

@@ -6,11 +6,9 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
 
-	. "code.cloudfoundry.org/cflocal/cf/cmd"
 	"code.cloudfoundry.org/cflocal/cf/cmd/mocks"
 	sharedmocks "code.cloudfoundry.org/cflocal/mocks"
 	"code.cloudfoundry.org/cflocal/remote"
-	"github.com/buildpack/forge"
 	"github.com/buildpack/forge/app"
 )
 

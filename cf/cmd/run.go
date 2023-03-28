@@ -11,8 +11,8 @@ import (
 
 	"github.com/fatih/color"
 
-	"github.com/buildpack/forge"
 	"github.com/buildpack/forge/engine"
+	forge "github.com/buildpack/forge/v2"
 )
 
 type Run struct {

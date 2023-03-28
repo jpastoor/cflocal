@@ -1,18 +1,26 @@
 package cfplugin
 
-import "code.cloudfoundry.org/cflocal/cfplugin/models"
+import plugin_models "code.cloudfoundry.org/cflocal/cfplugin/models"
 
-/**
+/*
+*
+
 	Command interface needs to be implemented for a runnable plugin of `cf`
-**/
+
+*
+*/
 type Plugin interface {
 	Run(cliConnection CliConnection, args []string)
 	GetMetadata() PluginMetadata
 }
 
-/**
+/*
+*
+
 	List of commands available to CliConnection variable passed into run
-**/
+
+*
+*/
 type CliConnection interface {
 	CliCommandWithoutTerminalOutput(args ...string) ([]string, error)
 	CliCommand(args ...string) ([]string, error)

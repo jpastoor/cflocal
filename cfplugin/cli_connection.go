@@ -7,8 +7,6 @@ import (
 	"net/rpc"
 	"os"
 	"time"
-
-	"code.cloudfoundry.org/cflocal/cfplugin/models"
 )
 
 type cliConnection struct {

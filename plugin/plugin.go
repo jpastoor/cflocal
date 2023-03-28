@@ -11,10 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/buildpack/forge"
-	"github.com/buildpack/forge/app"
 	"github.com/buildpack/forge/engine"
 	"github.com/buildpack/forge/engine/docker"
+	forge "github.com/buildpack/forge/v2"
 	"github.com/fatih/color"
 	goversion "github.com/hashicorp/go-version"
 	"github.com/kardianos/osext"
@@ -77,10 +76,9 @@ func (p *Plugin) Run(cliConnection cfplugin.CliConnection, args []string) {
 	ccHTTPClient := &http.Client{
 		Transport: &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
-			DialContext: (&net.Dialer{
+			DialContext: (net.Dialer{
 				Timeout:   30 * time.Second,
 				KeepAlive: 30 * time.Second,
-				DualStack: true,
 			}).DialContext,
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: ccSkipSSLVerify,
@@ -110,9 +108,18 @@ func (p *Plugin) Run(cliConnection cfplugin.CliConnection, args []string) {
 		HTTP: ccHTTPClient,
 	}
 	sysFS := &fs.FS{}
-	config := &app.Config{
-		Path: "./local.yml",
+	appYAML := &forge.AppYAML{}
+	if err := appYAML.Load("./local.yml"); err != nil {
+		p.RunErr = err
+		return
 	}
+
+	appConfig := &cmd.Config{}
+	if err := appConfig.Load("./local.yml"); err != nil {
+		p.RunErr = err
+		return
+	}
+
 	help := &Help{
 		CLI: cliConnection,
 		UI:  p.UI,
@@ -127,7 +134,7 @@ func (p *Plugin) Run(cliConnection cfplugin.CliConnection, args []string) {
 				Image:    image,
 				FS:       sysFS,
 				Help:     help,
-				Config:   config,
+				Config:   appYAML,
 			},
 			&cmd.Pull{
 				UI:        p.UI,

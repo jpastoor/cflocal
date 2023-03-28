@@ -8,7 +8,6 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
 
-	. "code.cloudfoundry.org/cflocal/ui"
 	"github.com/buildpack/forge/engine"
 )
 

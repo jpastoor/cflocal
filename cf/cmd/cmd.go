@@ -9,9 +9,8 @@ import (
 
 	"code.cloudfoundry.org/cflocal/fs"
 	"code.cloudfoundry.org/cflocal/remote"
-	"github.com/buildpack/forge"
-	"github.com/buildpack/forge/app"
 	"github.com/buildpack/forge/engine"
+	forge "github.com/buildpack/forge/v2"
 )
 
 const (
@@ -86,8 +85,8 @@ type Help interface {
 
 //go:generate mockgen -package mocks -destination mocks/config.go code.cloudfoundry.org/cflocal/cf/cmd Config
 type Config interface {
-	Load() (*app.YAML, error)
-	Save(localYML *app.YAML) error
+	Load() (*forge.AppYAML, error)
+	Save(localYML *forge.AppYAML) error
 }
 
 func parseOptions(args []string, f func(name string, set *flag.FlagSet)) error {
@@ -106,7 +105,7 @@ func parseOptions(args []string, f func(name string, set *flag.FlagSet)) error {
 	return nil
 }
 
-func getAppConfig(name string, localYML *app.YAML) *forge.AppConfig {
+func getAppConfig(name string, localYML *forge.AppYAML) *forge.AppConfig {
 	var app *forge.AppConfig
 	for _, appConfig := range localYML.Applications {
 		if appConfig.Name == name {

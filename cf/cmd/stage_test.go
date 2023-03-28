@@ -5,7 +5,6 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/buildpack/forge"
 	"github.com/buildpack/forge/app"
 	"github.com/buildpack/forge/engine"
 	"github.com/fatih/color"

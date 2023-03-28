@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/buildpack/forge"
 	"github.com/buildpack/forge/engine"
+	forge "github.com/buildpack/forge/v2"
 	"github.com/fatih/color"
 )
 

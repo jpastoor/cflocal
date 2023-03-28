@@ -11,9 +11,8 @@ import (
 	. "code.cloudfoundry.org/cflocal/cf/cmd"
 	"code.cloudfoundry.org/cflocal/cf/cmd/mocks"
 	sharedmocks "code.cloudfoundry.org/cflocal/mocks"
-	"github.com/buildpack/forge"
-	"github.com/buildpack/forge/app"
 	"github.com/buildpack/forge/engine"
+	forge "github.com/buildpack/forge/v2"
 )
 
 var _ = Describe("Export", func() {
@@ -65,7 +64,7 @@ var _ = Describe("Export", func() {
 			progress <- mockProgress{Value: "some-progress"}
 			close(progress)
 			droplet := sharedmocks.NewMockBuffer("some-droplet")
-			localYML := &app.YAML{
+			localYML := &forge.AppYAML{
 				Applications: []*forge.AppConfig{
 					{
 						Name: "some-other-app",
