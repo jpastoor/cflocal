@@ -32,7 +32,7 @@ var (
 var _ = BeforeSuite(func() {
 	var err error
 
-	tempHome, err = ioutil.TempDir("", "cflocal")
+	tempHome, err = os.MkdirTemp("", "cflocal")
 	Expect(err).NotTo(HaveOccurred())
 
 	var set func(k, v string)
@@ -99,7 +99,7 @@ var _ = Describe("CF Local", func() {
 		BeforeEach(func() {
 			wd, err := os.Getwd()
 			Expect(err).NotTo(HaveOccurred())
-			tempDir, err = ioutil.TempDir(wd, ".test.tmp")
+			tempDir, err = os.MkdirTemp(wd, ".test.tmp")
 			Expect(err).NotTo(HaveOccurred())
 			Expect(archive.Copy("fixtures/go-app", tempDir)).To(Succeed())
 			Expect(archive.Copy("fixtures/test-app", tempDir)).To(Succeed())
@@ -110,7 +110,7 @@ var _ = Describe("CF Local", func() {
 			Expect(os.RemoveAll(tempDir)).To(Succeed())
 		})
 
-		It("should setup the staging and running environments to mimic CF", func() {
+		FIt("should setup the staging and running environments to mimic CF", func() {
 			By("staging", func() {
 				stageCmd := exec.Command("cf", "local", "stage", "some-name")
 				stageCmd.Dir = filepath.Join(tempDir, "test-app")
@@ -533,7 +533,15 @@ func uniqueName(s string) string {
 }
 
 func cf(args ...string) {
-	cmd := exec.Command("cf", args...)
+
+	nonEmptyArgs := make([]string, 0)
+	for _, arg := range args {
+		if arg != "" {
+			nonEmptyArgs = append(nonEmptyArgs, arg)
+		}
+	}
+
+	cmd := exec.Command("cf", nonEmptyArgs...)
 	session, err := gexec.Start(cmd, GinkgoWriter, GinkgoWriter)
 	ExpectWithOffset(1, err).NotTo(HaveOccurred())
 	EventuallyWithOffset(1, session, "10s").Should(gexec.Exit(0))

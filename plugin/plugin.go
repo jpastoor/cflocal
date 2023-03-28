@@ -74,13 +74,15 @@ func (p *Plugin) Run(cliConnection cfplugin.CliConnection, args []string) {
 		return
 	}
 
+	dialer := &net.Dialer{
+		Timeout:   30 * time.Second,
+		KeepAlive: 30 * time.Second,
+	}
+
 	ccHTTPClient := &http.Client{
 		Transport: &http.Transport{
-			Proxy: http.ProxyFromEnvironment,
-			DialContext: (net.Dialer{
-				Timeout:   30 * time.Second,
-				KeepAlive: 30 * time.Second,
-			}).DialContext,
+			Proxy:       http.ProxyFromEnvironment,
+			DialContext: dialer.DialContext,
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: ccSkipSSLVerify,
 			},

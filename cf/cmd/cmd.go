@@ -17,6 +17,9 @@ const (
 	RunStack     = "packs/cflinuxfs3:run"
 	BuildStack   = "packs/cflinuxfs3:build"
 	NetworkStack = "packs/cflinuxfs3:network"
+	//RunStack     = "cloudfoundry/cflinuxfs4"
+	//BuildStack   = "cloudfoundry/cflinuxfs4"
+	//NetworkStack = "cloudfoundry/cflinuxfs4"
 )
 
 type UI interface {

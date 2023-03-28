@@ -5,8 +5,8 @@ go 1.20
 require (
 	github.com/buildpack/forge v0.0.0-20180829155430-64e689137f57
 	github.com/fatih/color v1.6.0
-	github.com/fsnotify/fsevents v0.0.0-20180223060218-ed9a50f8badc
-	github.com/fsnotify/fsnotify v1.4.7
+	github.com/fsnotify/fsevents v0.1.1
+	github.com/fsnotify/fsnotify v1.6.0
 	github.com/golang/mock v1.1.1
 	github.com/hashicorp/go-version v0.0.0-20171129150820-4fe82ae3040f
 	github.com/kardianos/osext v0.0.0-20170510131534-ae77be60afb1
@@ -35,7 +35,7 @@ require (
 	github.com/sirupsen/logrus v1.0.3 // indirect
 	github.com/stretchr/testify v1.8.2 // indirect
 	golang.org/x/net v0.0.0-20180308154319-d0aafc73d5cd // indirect
-	golang.org/x/sys v0.0.0-20180308152046-7dca6fe1f437 // indirect
+	golang.org/x/sys v0.0.0-20220908164124-27713097b956 // indirect
 	golang.org/x/text v0.3.0 // indirect
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/fsnotify.v1 v1.4.7 // indirect
